@@ -2,6 +2,7 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import CameraScreen from './CameraScreen';
+import CollectionScreen from './CollectionScreen';
 import {
   Platform,
 } from 'react-native';
@@ -10,6 +11,7 @@ const AppNavigator = StackNavigator(
   {
     Home: { screen: HomeScreen },
     Camera: { screen: CameraScreen },
+    Collection: { screen: CollectionScreen },
   },
   {
     initialRouteName: 'Home',
