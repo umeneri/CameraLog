@@ -19,6 +19,12 @@ export default class HomeScreen extends React.Component {
             navigate('Camera', { user: 'ume' })
           }
         />
+        <Button
+          title="Let's Show Your Collection!"
+          onPress={() =>
+            navigate('Collection')
+          }
+        />
       </View>
     );
   }
