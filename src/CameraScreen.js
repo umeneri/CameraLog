@@ -9,21 +9,52 @@ import {
   Button,
 } from 'react-native';
 import Camera from 'react-native-camera';
+import RNPhotosFramework from 'react-native-photos-framework';
 
 export default class CameraScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: `Capture with ${navigation.state.params.user}`,
-  });
+
+  async findOrCreateAlbum() {
+    const title = 'cameralog';
+    const result = await RNPhotosFramework.getAlbumsByTitle(title);
+    const albums = result.albums;
+    console.log(albums);
+
+    if (albums.length > 0) {
+      console.log("album exists");
+      return albums[0];
+    }
+
+    const album = await RNPhotosFramework.createAlbum(title);
+
+    return album;
+  }
 
   async takePicture() {
     console.log('take');
     const options = {};
     //options.location = ...
 
-    const data = this.camera.capture({metadata: options}).catch(err => console.error(err));
+    const data = await this.camera.capture({metadata: options}).catch(err => console.error(err));
     console.log(data);
 
-    return data;
+    const album = await this.findOrCreateAlbum();
+    /* const asset = await RNPhotosFramework.createImageAsset({uri: data.path}); */
+    /* res = await album.addAssetsToAlbum(asset) */
+    /* console.log(res);                         */
+
+    const assets = await RNPhotosFramework.createAssets({
+      images : [{ uri : data.path }],
+      album : album,
+      includeMetadata : true,
+    });
+
+    const asset = assets[0];
+    console.log(asset);
+    let res = await asset.setFavorite(true);
+    console.log(res);
+    const date = Date.now();
+    res = await asset.setCreationDate(date);
+    console.log(res);
   }
 
   render() {

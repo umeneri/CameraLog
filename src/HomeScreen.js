@@ -17,23 +17,6 @@ export default class HomeScreen extends React.Component {
 
     this.getAssets(album);
   };
-
-  async findOrCreateAlbum() {
-    const title = 'cameralog';
-    const result = await RNPhotosFramework.getAlbumsByTitle(title);
-    const albums = result.albums;
-    console.log(albums);
-
-    if (albums.length > 0) {
-      console.log("album exists");
-      return albums[0];
-    }
-
-    const album = await RNPhotosFramework.createAlbum(title);
-
-    return album;
-  }
-
   async getAssets(album) {
     const photos = await album.getAssets({
       //The fetch-options from the outer query will apply here, if we get
