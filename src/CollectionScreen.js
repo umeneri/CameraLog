@@ -1,3 +1,4 @@
+// https://medium.com/react-native-training/mastering-the-camera-roll-in-react-native-13b3b1963a2d
 import React, { Component } from 'react';
 import {
   View,
@@ -12,7 +13,6 @@ import {
   ScrollView,
   RefreshControl
 } from 'react-native';
-
 import Share from 'react-native-share';
 import RNFetchBlob from 'react-native-fetch-blob';
 

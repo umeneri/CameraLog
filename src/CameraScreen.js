@@ -15,13 +15,15 @@ export default class CameraScreen extends React.Component {
     title: `Capture with ${navigation.state.params.user}`,
   });
 
-  takePicture() {
+  async takePicture() {
     console.log('take');
     const options = {};
     //options.location = ...
-    this.camera.capture({metadata: options})
-      .then((data) => console.log(data))
-      .catch(err => console.error(err));
+
+    const data = this.camera.capture({metadata: options}).catch(err => console.error(err));
+    console.log(data);
+
+    return data;
   }
 
   render() {
