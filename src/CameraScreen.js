@@ -24,24 +24,15 @@ export default class CameraScreen extends React.Component {
       return albums[0];
     }
 
-    const album = await RNPhotosFramework.createAlbum(title);
-
-    return album;
+    return  await RNPhotosFramework.createAlbum(title);
   }
 
   async takePicture() {
     console.log('take');
     const options = {};
-    //options.location = ...
 
     const data = await this.camera.capture({metadata: options}).catch(err => console.error(err));
-    console.log(data);
-
     const album = await this.findOrCreateAlbum();
-    /* const asset = await RNPhotosFramework.createImageAsset({uri: data.path}); */
-    /* res = await album.addAssetsToAlbum(asset) */
-    /* console.log(res);                         */
-
     const assets = await RNPhotosFramework.createAssets({
       images : [{ uri : data.path }],
       album : album,
