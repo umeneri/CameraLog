@@ -66,7 +66,6 @@ CameraRoll.getPhotos({
     const media = [];
 
     data.edges.forEach((d) => {
-      console.log(d.node);
       media.push({
         photo: d.node.image.uri,
       });

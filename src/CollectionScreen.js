@@ -13,8 +13,8 @@ import {
   ScrollView,
   RefreshControl
 } from 'react-native';
-import Share from 'react-native-share';
 import RNFetchBlob from 'react-native-fetch-blob';
+import PhotoController from './lib/PhotoController';
 
 let styles;
 const { width } = Dimensions.get('window');
@@ -39,34 +39,17 @@ export default class CollectionScreen extends React.Component {
   };
 
   getPhotos = () => {
-    console.log("getPhotos");
-    console.log(CameraRoll);
-    CameraRoll.getPhotos({
-      first: 20,
-      assetType: 'All'
-    })
-    .then(r => this.setState({ photos: r.edges }))
+    /* console.log("getPhotos"); */
+    /* console.log(CameraRoll);  */
+    /* CameraRoll.getPhotos({                         */
+    /*   first: 20,                                   */
+    /*   assetType: 'All'                             */
+    /* })                                             */
+    /* .then(r => this.setState({ photos: r.edges })) */
   };
 
   toggleModal = () => {
     this.setState({ modalVisible: !this.state.modalVisible });
-  };
-
-  share = () => {
-    const image = this.state.photos[this.state.index].node.image.uri
-    RNFetchBlob.fs.readFile(image, 'base64')
-    .then((data) => {
-      let shareOptions = {
-        title: "React Native Share Example",
-        message: "Check out this photo!",
-        url: `data:image/jpg;base64,${data}`,
-        subject: "Check out this photo!"
-      };
-
-      Share.open(shareOptions)
-        .then((res) => console.log('res:', res))
-        .catch(err => console.log('err', err))
-    })
   };
 
   startGetPhotos = () => {
@@ -81,10 +64,6 @@ export default class CollectionScreen extends React.Component {
         <Button
           title='View Photos'
           onPress={this.startGetPhotos}
-        />
-        <Button
-          title='Browse Images'
-          onPress={this.navigate}
         />
         <Modal
           animationType={"slide"}
@@ -120,16 +99,6 @@ export default class CollectionScreen extends React.Component {
                 })
               }
             </ScrollView>
-            {
-              this.state.index !== null  && (
-                <View style={styles.shareButton}>
-                  <Button
-                      title='Share'
-                      onPress={this.share}
-                    />
-                </View>
-              )
-            }
           </View>
         </Modal>
       </View>

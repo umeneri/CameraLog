@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import { ActionSheetIOS, Platform } from 'react-native';
-
+import {
+  ActionSheetIOS,
+  Platform,
+  CameraRoll,
+} from 'react-native';
 import PhotoBrowser from 'react-native-photo-browser';
+import PhotoController from './lib/PhotoController';
+
 
 export default class DetailScreen extends Component {
   static navigationOptions = {
@@ -27,9 +32,59 @@ export default class DetailScreen extends Component {
     }
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      mediaList: [],
+      title: 'Library photos',
+      description: 'showing grid first, custom action method',
+      startOnGrid: true,
+      displayActionButton: true,
+      displayNavArrows: true,
+      displaySelectionButtons: false,
+      itemPerRow: 5, // bug for 7
+    };
+  }
+
+  async componentDidMount() {
+    const album = await PhotoController.getAlbum();
+    const assets = await PhotoController.getAssets(album);
+    const mediaList = assets.map((asset) => {
+      return {
+        photo: asset.uri,
+      }
+    });
+
+    this.setState({
+      mediaList,
+    });
+
+    /* CameraRoll.getPhotos({           */
+    /*   first: 100,                    */
+    /*   assetType: 'Photos',           */
+    /* }).then(data => {                */
+    /*   const mediaList = [];          */
+    /*   console.info(data);            */
+
+    /*   data.edges.forEach((d) => {    */
+    /*     mediaList.push({             */
+    /*       photo: d.node.image.uri,   */
+    /*     });                          */
+    /*   });                            */
+
+    /*   this.setState({                */
+    /*     mediaList,                   */
+    /*   });                            */
+
+    /*   console.info('test');          */
+    /*   console.log(this.state);       */
+    /* }).catch(error => alert(error)); */
+  }
+
   render() {
     const {
-      media,
+      mediaList,
       initialIndex,
       displayNavArrows,
       displayActionButton,
@@ -38,24 +93,24 @@ export default class DetailScreen extends Component {
       enableGrid,
       alwaysDisplayStatusBar,
       itemPerRow,
-    } = this.props.navigation.state.params.example;
+    } = this.state;
 
     return (
       <PhotoBrowser
-        onBack={navigator.pop}
-        mediaList={media}
-        initialIndex={initialIndex}
-        displayNavArrows={displayNavArrows}
-        displaySelectionButtons={displaySelectionButtons}
-        displayActionButton={displayActionButton}
-        startOnGrid={startOnGrid}
-        enableGrid={enableGrid}
-        useCircleProgress
-        onSelectionChanged={this.onSelectionChanged}
-        onActionButton={this.onActionButton}
-        alwaysDisplayStatusBar={alwaysDisplayStatusBar}
-        itemPerRow={itemPerRow}
-        customTitle={(index, rowCount) => `${index} sur ${rowCount}`}
+      onBack={navigator.pop}
+      mediaList={mediaList}
+      initialIndex={initialIndex}
+      displayNavArrows={displayNavArrows}
+      displaySelectionButtons={displaySelectionButtons}
+      displayActionButton={displayActionButton}
+      startOnGrid={startOnGrid}
+      enableGrid={enableGrid}
+      useCircleProgress
+      onSelectionChanged={this.onSelectionChanged}
+      onActionButton={this.onActionButton}
+      alwaysDisplayStatusBar={alwaysDisplayStatusBar}
+      itemPerRow={itemPerRow}
+      customTitle={(index, rowCount) => `${index} sur ${rowCount}`}
       />
     );
   }
