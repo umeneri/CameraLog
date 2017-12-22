@@ -4,7 +4,6 @@ import {
   View,
   Text,
 } from 'react-native';
-import RNPhotosFramework from 'react-native-photos-framework';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {

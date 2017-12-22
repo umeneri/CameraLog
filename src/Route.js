@@ -19,7 +19,7 @@ const AppNavigator = StackNavigator(
     Detail: { screen: DetailScreen },
   },
   {
-    initialRouteName: 'Camera',
+    initialRouteName: 'Collection',
     /* headerMode: 'none', */
 
     /*

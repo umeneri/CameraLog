@@ -1,4 +1,3 @@
-'use strict';
 import React, { Component } from 'react';
 import {
   Dimensions,
@@ -9,43 +8,21 @@ import {
   Button,
 } from 'react-native';
 import Camera from 'react-native-camera';
-import RNPhotosFramework from 'react-native-photos-framework';
+import PhotoController from './lib/PhotoController';
 
 export default class CameraScreen extends React.Component {
-
-  async findOrCreateAlbum() {
-    const title = 'cameralog';
-    const result = await RNPhotosFramework.getAlbumsByTitle(title);
-    const albums = result.albums;
-    console.log(albums);
-
-    if (albums.length > 0) {
-      console.log("album exists");
-      return albums[0];
-    }
-
-    return  await RNPhotosFramework.createAlbum(title);
-  }
 
   async takePicture() {
     console.log('take');
     const options = {};
 
     const data = await this.camera.capture({metadata: options}).catch(err => console.error(err));
-    const album = await this.findOrCreateAlbum();
-    const assets = await RNPhotosFramework.createAssets({
-      images : [{ uri : data.path }],
-      album : album,
-      includeMetadata : true,
-    });
+    const album = await PhotoController.findOrCreateAlbum();
+    const asset = PhotoController.createAsset(album, data.path);
+  }
 
-    const asset = assets[0];
-    console.log(asset);
-    let res = await asset.setFavorite(true);
-    console.log(res);
-    const date = Date.now();
-    res = await asset.setCreationDate(date);
-    console.log(res);
+  ref(cam) {
+    this.camera = cam;
   }
 
   render() {
@@ -53,9 +30,7 @@ export default class CameraScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
+          ref={this.ref.bind(this)}
           style={styles.preview}
           aspect={Camera.constants.Aspect.fill}>
           <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
