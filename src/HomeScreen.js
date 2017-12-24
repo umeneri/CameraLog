@@ -6,14 +6,11 @@ import {
   StyleSheet,
 } from 'react-native';
 import CalendarCameraRollPicker from './components/CalendarCameraRollPicker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const TITLE = 'cameralog';
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Welcome',
-  };
-
   constructor(props) {
     super(props);
 
@@ -22,7 +19,6 @@ export default class HomeScreen extends React.Component {
       selected: [],
     };
   }
-
 
   getSelectedImages(images, current) {
     var num = images.length;

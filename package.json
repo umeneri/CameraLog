@@ -16,7 +16,7 @@
 		"react-native-photos-framework": "^1.0.8",
 		"react-native-share": "^1.0.23",
 		"react-native-vector-icons": "^4.4.3",
-		"react-navigation": "^1.0.0-beta.19"
+		"react-navigation": "^1.0.0-beta.22"
 	},
 	"devDependencies": {
 		"babel-jest": "21.2.0",

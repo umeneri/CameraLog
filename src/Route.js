@@ -1,32 +1,68 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { TabNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import CameraScreen from './CameraScreen';
 import CollectionScreen from './CollectionScreen';
 import PhotosScreen from './PhotosScreen';
 import DetailScreen from './DetailScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {
+  View,
+} from 'react-native';
 
 import {
   Platform,
 } from 'react-native';
 
-const AppNavigator = StackNavigator(
+const AppNavigator = TabNavigator(
   {
-    Home: { screen: HomeScreen },
-    Camera: { screen: CameraScreen },
-    Collection: { screen: CollectionScreen },
-    Photos: { screen: PhotosScreen },
-    Detail: { screen: DetailScreen },
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={ focused ? "ios-apps" : "ios-apps-outline" } style={{
+            height: 24,
+              width: 24,
+              fontSize: 24,
+          }}
+          />
+        )
+      },
+    },
+    Camera: {
+      screen: CameraScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={ focused ? "ios-camera" : "ios-camera-outline" } style={{
+            height: 24,
+              width: 24,
+              fontSize: 24,
+          }}
+          />
+        )
+      },
+    },
+    Detail: {
+      screen: DetailScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={ focused ? "ios-copy" : "ios-copy-outline" } style={{
+            height: 24,
+              width: 24,
+              fontSize: 24,
+          }}
+          />
+        )
+      },
+    },
   },
   {
-    initialRouteName: 'Detail',
-    /* headerMode: 'none', */
-
-    /*
-   * Use modal on iOS because the card mode comes from the right,
-   * which conflicts with the drawer example gesture
-   */
-    mode: Platform.OS === 'ios' ? 'modal' : 'card',
+    initialRouteName: 'Home',
+    tabBarPosition: 'bottom',
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: '#676767',
+    },
   }
 );
 

@@ -3,10 +3,10 @@ import {
   ActionSheetIOS,
   Platform,
   CameraRoll,
+  StyleSheet,
 } from 'react-native';
 import PhotoBrowser from 'react-native-photo-browser';
 import PhotoController from './lib/PhotoController';
-
 
 export default class DetailScreen extends Component {
   static navigationOptions = {
@@ -50,7 +50,7 @@ export default class DetailScreen extends Component {
   async componentDidMount() {
     const album = await PhotoController.getAlbum();
     const assets = await PhotoController.getAssets(album);
-    console.log(assets);
+    /* console.log(assets); */
     const mediaList = assets.map((asset) => {
       return {
         photo: asset.uri,
