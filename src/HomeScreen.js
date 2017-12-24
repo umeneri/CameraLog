@@ -1,60 +1,171 @@
 import React, { Component } from 'react';
 import {
+  ActionSheetIOS,
+  Platform,
+  CameraRoll,
+  StyleSheet,
   Button,
   View,
   Text,
-  StyleSheet,
+  TouchableHighlight,
+  Dimensions,
 } from 'react-native';
-import CalendarCameraRollPicker from './components/CalendarCameraRollPicker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import PhotoBrowser from 'react-native-photo-browser';
+import PhotoController from './lib/PhotoController';
 
-const TITLE = 'cameralog';
+const { width } = Dimensions.get('window');
 
-export default class HomeScreen extends React.Component {
+export default class DetailScreen extends Component {
+  remove = (arr, element) => {
+    const index = arr.indexOf(element);
+    if (index !== -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+  }
+
+  onSelectionChanged = (media, index, selected) => {
+    let selectedItems = this.state.selectedItems.slice();
+
+    if (selected) {
+      selectedItems.push(index);
+    } else {
+      selectedItems = this.remove(selectedItems, index)
+    }
+
+    const oldMediaList = this.state.mediaList;
+    const newMediaList = oldMediaList.slice();
+    const selectedMedia = {
+      ...oldMediaList[index],
+      selected,
+    };
+    newMediaList[index] = selectedMedia;
+
+    this.setState({
+      mediaList: newMediaList,
+      selectedItems,
+    });
+  };
+
+  onActionButton = (media, index) => {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showShareActionSheetWithOptions(
+        {
+          url: media.photo,
+          message: media.caption,
+        },
+        () => {},
+        () => {},
+      );
+    } else {
+      alert(`handle sharing on android for ${media.photo}, index: ${index}`);
+    }
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
+      mediaList: [],
+      title: 'Library photos',
+      description: 'showing grid first, custom action method',
+      startOnGrid: true,
+      displayActionButton: true,
+      displayNavArrows: true,
+      displaySelectionButtons: true,
+      itemPerRow: 3, // bug for 7
       num: 0,
-      selected: [],
+      selectedItems: [],
     };
   }
 
-  getSelectedImages(images, current) {
-    var num = images.length;
-
-    this.setState({
-      num: num,
-      selected: images,
-      groupTypes: 'Faces',
+  async componentDidMount() {
+    const album = await PhotoController.getAlbum();
+    const assets = await PhotoController.getAssets(album);
+    const mediaList = assets.map((asset) => {
+      return {
+        photo: asset.uri,
+      }
     });
 
-    console.log(current);
-    console.log(this.state.selected);
+    this.setState({
+      mediaList,
+    });
+  }
+
+  customTitle(index, rowCount) {
+    return `${index} sur ${rowCount}`;
+  }
+
+  onBuckButton() {
+    console.log('pressed');
+  }
+
+  onDetailButton() {
+    console.log('pressed');
+  }
+
+  renderButtons() {
+    if (this.state.selectedItems.length == 0) {
+      return null;
+    }
+
+    return (
+      <View
+      style={styles.buttons}
+      >
+        <TouchableHighlight
+          style={styles.content}
+          onPress={this.onDetailButton}>
+          <Text style={styles.text}>
+            戻る
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.content}
+          onPress={this.onBuckButton}>
+          <Text style={styles.text}>
+            Detail
+          </Text>
+      </TouchableHighlight>
+      </View>
+    );
   }
 
   render() {
-    const { navigate } = this.props.navigation;
+    const {
+      mediaList,
+      initialIndex,
+      displayNavArrows,
+      displayActionButton,
+      displaySelectionButtons,
+      startOnGrid,
+      enableGrid,
+      alwaysDisplayStatusBar,
+      itemPerRow,
+    } = this.state;
+
     return (
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.text}>
-            <Text style={styles.bold}> {this.state.num} </Text> images has been selected
-          </Text>
-        </View>
-        <CalendarCameraRollPicker
-          scrollRenderAheadDistance={500}
-          initialListSize={1}
-          pageSize={3}
-          removeClippedSubviews={false}
-          groupTypes={this.state.groupTypes}
-          batchSize={5}
-          maximum={3}
-          selected={this.state.selected}
-          assetType='Photos'
-          imagesPerRow={7}
-          imageMargin={5}
-          callback={this.getSelectedImages.bind(this)} />
+      <View
+        style={styles.container}
+      >
+        <PhotoBrowser
+        onBack={navigator.pop}
+        mediaList={mediaList}
+        initialIndex={initialIndex}
+        displayNavArrows={displayNavArrows}
+        displaySelectionButtons={displaySelectionButtons}
+        displayActionButton={displayActionButton}
+        startOnGrid={startOnGrid}
+        enableGrid={enableGrid}
+        useCircleProgress
+        onSelectionChanged={this.onSelectionChanged}
+        onActionButton={this.onActionButton}
+        alwaysDisplayStatusBar={alwaysDisplayStatusBar}
+        itemPerRow={itemPerRow}
+        customTitle={this.customTitle}
+        />
+        { this.renderButtons() }
       </View>
     );
   }
@@ -63,20 +174,25 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6AE2D',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
-  content: {
-    marginTop: 15,
+  buttons: {
+    backgroundColor: '#999',
+    width,
     height: 50,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    flexWrap: 'wrap',
+  },
+  content: {
+    alignItems: 'center',
   },
   text: {
     fontSize: 16,
     alignItems: 'center',
-    color: '#fff',
+    color: '#000',
   },
   bold: {
     fontWeight: 'bold',

@@ -2,8 +2,6 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import CameraScreen from './CameraScreen';
-import CollectionScreen from './CollectionScreen';
-import PhotosScreen from './PhotosScreen';
 import DetailScreen from './DetailScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -57,7 +55,7 @@ const AppNavigator = TabNavigator(
     },
   },
   {
-    initialRouteName: 'Detail',
+    initialRouteName: 'Home',
     tabBarPosition: 'bottom',
     animationEnabled: true,
     lazy: true,
