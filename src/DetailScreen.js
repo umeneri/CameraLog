@@ -4,13 +4,47 @@ import {
   Platform,
   CameraRoll,
   StyleSheet,
+  Button,
+  View,
+  Text,
+  TouchableHighlight,
+  Dimensions,
 } from 'react-native';
 import PhotoBrowser from 'react-native-photo-browser';
 import PhotoController from './lib/PhotoController';
 
+const { width } = Dimensions.get('window');
+
 export default class DetailScreen extends Component {
+  remove = (arr, element) => {
+    const index = arr.indexOf(element);
+    if (index !== -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+  }
+
   onSelectionChanged = (media, index, selected) => {
-    alert(`${media.photo} selection status: ${selected}`);
+    let selectedItems = this.state.selectedItems.slice();
+
+    if (selected) {
+      selectedItems.push(index);
+    } else {
+      selectedItems = this.remove(selectedItems, index)
+    }
+
+    const oldMediaList = this.state.mediaList;
+    const newMediaList = oldMediaList.slice();
+    const selectedMedia = {
+      ...oldMediaList[index],
+      selected,
+    };
+    newMediaList[index] = selectedMedia;
+
+    this.setState({
+      mediaList: newMediaList,
+      selectedItems,
+    });
   };
 
   onActionButton = (media, index) => {
@@ -40,6 +74,8 @@ export default class DetailScreen extends Component {
       displayNavArrows: true,
       displaySelectionButtons: true,
       itemPerRow: 3, // bug for 7
+      num: 0,
+      selectedItems: [],
     };
   }
 
@@ -57,6 +93,41 @@ export default class DetailScreen extends Component {
     });
   }
 
+  _onPressButton() {
+    console.log('pressed');
+  }
+
+  customTitle(index, rowCount) {
+    return `${index} sur ${rowCount}`;
+  }
+
+  renderButtons() {
+    if (this.state.selectedItems.length == 0) {
+      return null;
+    }
+
+    return (
+      <View
+      style={styles.buttons}
+      >
+        <TouchableHighlight
+          style={styles.content}
+          onPress={this._onPressButton}>
+          <Text style={styles.text}>
+            戻る
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.content}
+          onPress={this._onPressButton}>
+          <Text style={styles.text}>
+            Detail
+          </Text>
+      </TouchableHighlight>
+      </View>
+    );
+  }
+
   render() {
     const {
       mediaList,
@@ -71,22 +142,59 @@ export default class DetailScreen extends Component {
     } = this.state;
 
     return (
-      <PhotoBrowser
-      onBack={navigator.pop}
-      mediaList={mediaList}
-      initialIndex={initialIndex}
-      displayNavArrows={displayNavArrows}
-      displaySelectionButtons={displaySelectionButtons}
-      displayActionButton={displayActionButton}
-      startOnGrid={startOnGrid}
-      enableGrid={enableGrid}
-      useCircleProgress
-      onSelectionChanged={this.onSelectionChanged}
-      onActionButton={this.onActionButton}
-      alwaysDisplayStatusBar={alwaysDisplayStatusBar}
-      itemPerRow={itemPerRow}
-      customTitle={(index, rowCount) => `${index} sur ${rowCount}`}
-      />
+      <View
+        style={styles.container}
+      >
+        <PhotoBrowser
+        onBack={navigator.pop}
+        mediaList={mediaList}
+        initialIndex={initialIndex}
+        displayNavArrows={displayNavArrows}
+        displaySelectionButtons={displaySelectionButtons}
+        displayActionButton={displayActionButton}
+        startOnGrid={startOnGrid}
+        enableGrid={enableGrid}
+        useCircleProgress
+        onSelectionChanged={this.onSelectionChanged}
+        onActionButton={this.onActionButton}
+        alwaysDisplayStatusBar={alwaysDisplayStatusBar}
+        itemPerRow={itemPerRow}
+        customTitle={this.customTitle}
+        />
+        { this.renderButtons() }
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  buttons: {
+    backgroundColor: '#999',
+    width,
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  content: {
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 16,
+    alignItems: 'center',
+    color: '#000',
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  info: {
+    fontSize: 12,
+  },
+});
+
