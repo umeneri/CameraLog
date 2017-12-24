@@ -64,19 +64,6 @@ export default class HomeScreen extends React.Component {
   }
 }
 
-        /* <Button                                 */
-        /*   title="Let's Take a Picture!"         */
-        /*   onPress={() =>                        */
-        /*     navigate('Camera', { user: 'ume' }) */
-        /*   }                                     */
-        /* />                                      */
-        /* <Button                                 */
-        /*   title="Let's Show Your Collection!"   */
-        /*   onPress={() =>                        */
-        /*     navigate('Collection')              */
-        /*   }                                     */
-        /* />                                      */
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
