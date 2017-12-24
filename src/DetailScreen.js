@@ -42,7 +42,7 @@ export default class DetailScreen extends Component {
       startOnGrid: true,
       displayActionButton: true,
       displayNavArrows: true,
-      displaySelectionButtons: false,
+      displaySelectionButtons: true,
       itemPerRow: 5, // bug for 7
     };
   }
@@ -50,6 +50,7 @@ export default class DetailScreen extends Component {
   async componentDidMount() {
     const album = await PhotoController.getAlbum();
     const assets = await PhotoController.getAssets(album);
+    console.log(assets);
     const mediaList = assets.map((asset) => {
       return {
         photo: asset.uri,

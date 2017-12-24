@@ -37,11 +37,8 @@ class PhotoController {
     });
 
     const asset = assets[0];
-    console.log(asset);
-    let res = await asset.setFavorite(true);
-    console.log(res);
     const date = Date.now();
-    res = await asset.setCreationDate(date);
+    const res = await asset.setCreationDate(date);
     console.log(res);
 
     return asset;
@@ -56,35 +53,28 @@ class PhotoController {
   }
 
   async getAssets(album) {
-    /* return await RNPhotosFramework.getAssets({                                          */
-    /*   //Example props below. Many optional.                                             */
-    /*   // You can call this function multiple times providing startIndex and endIndex as */
-    /*   // pagination.                                                                    */
-    /*   startIndex: 0,                                                                    */
-    /*   endIndex: 100,                                                                    */
-    /*   includeMetadata: true,                                                            */
+    /* return await RNPhotosFramework.getAssets({ */
+    /*   startIndex: 0,                           */
+    /*   endIndex: 100,                           */
+    /*   includeMetadata: true,                   */
+    /*   fetchOptions : {                         */
+    /*     sourceTypes: ['userLibrary'],          */
+    /*     sortDescriptors : [                    */
+    /*       {                                    */
+    /*         key: 'creationDate',               */
+    /*         ascending: true,                   */
+    /*       }                                    */
+    /*     ]                                      */
+    /*   }                                        */
+    /* });                                        */
 
-    /*   fetchOptions : {                                                                  */
-    /*     // Media types you wish to display. See table below for possible options. Where */
-    /*     // is the image located? See table below for possible options.                  */
-    /*     sourceTypes: ['userLibrary'],                                                   */
-
-    /*     sortDescriptors : [                                                             */
-    /*       {                                                                             */
-    /*         key: 'creationDate',                                                        */
-    /*         ascending: true,                                                            */
-    /*       }                                                                             */
-    /*     ]                                                                               */
-    /*   }                                                                                 */
-    /* });                                                                                 */
-
-      const response = await album.getAssets({
-        startIndex: 0,
-        endIndex: 10,
-        trackInsertsAndDeletes: true,
-        trackChanges: false,
-        includeMetadata: true,
-      })
+    const response = await album.getAssets({
+      startIndex: 0,
+      endIndex: 1000,
+      trackInsertsAndDeletes: true,
+      trackChanges: false,
+      includeMetadata: true,
+    })
     return asset = response.assets;
   }
 
