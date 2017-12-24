@@ -57,9 +57,10 @@ const AppNavigator = TabNavigator(
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Detail',
     tabBarPosition: 'bottom',
     animationEnabled: true,
+    lazy: true,
     tabBarOptions: {
       activeTintColor: '#676767',
     },

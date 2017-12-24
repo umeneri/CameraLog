@@ -9,10 +9,6 @@ import PhotoBrowser from 'react-native-photo-browser';
 import PhotoController from './lib/PhotoController';
 
 export default class DetailScreen extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-
   onSelectionChanged = (media, index, selected) => {
     alert(`${media.photo} selection status: ${selected}`);
   };
@@ -43,14 +39,13 @@ export default class DetailScreen extends Component {
       displayActionButton: true,
       displayNavArrows: true,
       displaySelectionButtons: true,
-      itemPerRow: 5, // bug for 7
+      itemPerRow: 3, // bug for 7
     };
   }
 
   async componentDidMount() {
     const album = await PhotoController.getAlbum();
     const assets = await PhotoController.getAssets(album);
-    /* console.log(assets); */
     const mediaList = assets.map((asset) => {
       return {
         photo: asset.uri,
@@ -60,27 +55,6 @@ export default class DetailScreen extends Component {
     this.setState({
       mediaList,
     });
-
-    /* CameraRoll.getPhotos({           */
-    /*   first: 100,                    */
-    /*   assetType: 'Photos',           */
-    /* }).then(data => {                */
-    /*   const mediaList = [];          */
-    /*   console.info(data);            */
-
-    /*   data.edges.forEach((d) => {    */
-    /*     mediaList.push({             */
-    /*       photo: d.node.image.uri,   */
-    /*     });                          */
-    /*   });                            */
-
-    /*   this.setState({                */
-    /*     mediaList,                   */
-    /*   });                            */
-
-    /*   console.info('test');          */
-    /*   console.log(this.state);       */
-    /* }).catch(error => alert(error)); */
   }
 
   render() {
