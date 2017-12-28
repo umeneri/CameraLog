@@ -78,7 +78,7 @@ class PhotoController {
     return asset = response.assets;
   }
 
-  hasError(erorr) {
+  hasError(error) {
     console.error(error);
     return null;
   }

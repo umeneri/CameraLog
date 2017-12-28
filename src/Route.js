@@ -1,5 +1,8 @@
 import React from 'react';
-import { TabNavigator } from 'react-navigation';
+import {
+  TabNavigator,
+StackNavigator
+} from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import CameraScreen from './CameraScreen';
 import DetailScreen from './DetailScreen';
@@ -12,7 +15,7 @@ import {
   Platform,
 } from 'react-native';
 
-const AppNavigator = TabNavigator(
+const mainTabNavigator = TabNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -40,19 +43,19 @@ const AppNavigator = TabNavigator(
         )
       },
     },
-    Detail: {
-      screen: DetailScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={ focused ? "ios-copy" : "ios-copy-outline" } style={{
-            height: 24,
-              width: 24,
-              fontSize: 24,
-          }}
-          />
-        )
-      },
-    },
+    /* Detail: {                                                                   */
+    /*   screen: DetailScreen,                                                     */
+    /*   navigationOptions: {                                                      */
+    /*     tabBarIcon: ({ tintColor, focused }) => (                               */
+    /*       <Ionicons name={ focused ? "ios-copy" : "ios-copy-outline" } style={{ */
+    /*         height: 24,                                                         */
+    /*           width: 24,                                                        */
+    /*           fontSize: 24,                                                     */
+    /*       }}                                                                    */
+    /*       />                                                                    */
+    /*     )                                                                       */
+    /*   },                                                                        */
+    /* }, */
   },
   {
     initialRouteName: 'Home',
@@ -64,6 +67,22 @@ const AppNavigator = TabNavigator(
     },
   }
 );
+
+
+const AppNavigator = StackNavigator(
+  {
+    Home: { screen: mainTabNavigator },
+    Detail: { screen: DetailScreen },
+  },
+  {
+    initialRouteName: 'Home',
+    mode: 'modal',
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  }
+);
+
 
 export default () => <AppNavigator />;
 
