@@ -3,116 +3,109 @@ import {
   ActionSheetIOS,
   Platform,
   CameraRoll,
+  StyleSheet,
+  Button,
+  View,
+  Text,
+  StatusBar,
+  TouchableHighlight,
+  Dimensions,
+  Image,
 } from 'react-native';
-import PhotoBrowser from 'react-native-photo-browser';
 import PhotoController from './lib/PhotoController';
 
+const { width } = Dimensions.get('window');
 
 export default class DetailScreen extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-
-  onSelectionChanged = (media, index, selected) => {
-    alert(`${media.photo} selection status: ${selected}`);
-  };
-
-  onActionButton = (media, index) => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showShareActionSheetWithOptions(
-        {
-          url: media.photo,
-          message: media.caption,
-        },
-        () => {},
-        () => {},
-      );
-    } else {
-      alert(`handle sharing on android for ${media.photo}, index: ${index}`);
-    }
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: 'title',
+  });
 
   constructor(props) {
     super(props);
+    console.log(this.props);
+
+    const { selectedItems } = this.props.navigation.state.params;
 
     this.state = {
-      mediaList: [],
-      title: 'Library photos',
-      description: 'showing grid first, custom action method',
-      startOnGrid: true,
-      displayActionButton: true,
-      displayNavArrows: true,
-      displaySelectionButtons: true,
-      itemPerRow: 5, // bug for 7
+      selectedItems,
+      currentIndex: 0,
     };
   }
 
-  async componentDidMount() {
-    const album = await PhotoController.getAlbum();
-    const assets = await PhotoController.getAssets(album);
-    console.log(assets);
-    const mediaList = assets.map((asset) => {
-      return {
-        photo: asset.uri,
-      }
-    });
+  toggle() {
+    const list = this.state.selectedItems;
+    console.log('toggle');
+    console.log(this.state.currentIndex);
 
     this.setState({
-      mediaList,
-    });
+      currentIndex: this.state.currentIndex + 1 % list.length,
+    })
+  }
 
-    /* CameraRoll.getPhotos({           */
-    /*   first: 100,                    */
-    /*   assetType: 'Photos',           */
-    /* }).then(data => {                */
-    /*   const mediaList = [];          */
-    /*   console.info(data);            */
-
-    /*   data.edges.forEach((d) => {    */
-    /*     mediaList.push({             */
-    /*       photo: d.node.image.uri,   */
-    /*     });                          */
-    /*   });                            */
-
-    /*   this.setState({                */
-    /*     mediaList,                   */
-    /*   });                            */
-
-    /*   console.info('test');          */
-    /*   console.log(this.state);       */
-    /* }).catch(error => alert(error)); */
+  async componentDidMount() {
+    /* setInterval(this.toggle.bind(this), 1000); */
   }
 
   render() {
+    console.log("detail");
+
     const {
-      mediaList,
-      initialIndex,
-      displayNavArrows,
-      displayActionButton,
-      displaySelectionButtons,
-      startOnGrid,
-      enableGrid,
-      alwaysDisplayStatusBar,
-      itemPerRow,
+      selectedItems,
+      currentIndex,
     } = this.state;
 
     return (
-      <PhotoBrowser
-      onBack={navigator.pop}
-      mediaList={mediaList}
-      initialIndex={initialIndex}
-      displayNavArrows={displayNavArrows}
-      displaySelectionButtons={displaySelectionButtons}
-      displayActionButton={displayActionButton}
-      startOnGrid={startOnGrid}
-      enableGrid={enableGrid}
-      useCircleProgress
-      onSelectionChanged={this.onSelectionChanged}
-      onActionButton={this.onActionButton}
-      alwaysDisplayStatusBar={alwaysDisplayStatusBar}
-      itemPerRow={itemPerRow}
-      customTitle={(index, rowCount) => `${index} sur ${rowCount}`}
-      />
+      <View
+        style={styles.container}
+      >
+        <Text>
+         image is here.
+        </Text>
+        <Image
+          style={styles.image}
+          source={{uri: selectedItems[currentIndex].photo}}
+        />
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#888',
+  },
+  buttons: {
+    backgroundColor: '#999',
+    /* width, */
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  content: {
+    alignItems: 'center',
+  },
+  image: {
+    flex: 1,
+    width,
+    backgroundColor: 'red',
+  },
+  text: {
+    fontSize: 16,
+    alignItems: 'center',
+    color: '#000',
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  info: {
+    fontSize: 12,
+  },
+});
+
+
