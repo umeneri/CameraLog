@@ -15,7 +15,7 @@ import PhotoController from './lib/PhotoController';
 
 const { width } = Dimensions.get('window');
 
-export default class DetailScreen extends Component {
+export default class HomeScreen extends Component {
   remove = (arr, element) => {
     const index = arr.indexOf(element);
     if (index !== -1) {
@@ -25,12 +25,12 @@ export default class DetailScreen extends Component {
   }
 
   onSelectionChanged = (media, index, selected) => {
-    let selectedItems = this.state.selectedItems.slice();
+    let selectedItemIndexes = this.state.selectedItemIndexes.slice();
 
     if (selected) {
-      selectedItems.push(index);
+      selectedItemIndexes.push(index);
     } else {
-      selectedItems = this.remove(selectedItems, index)
+      selectedItemIndexes = this.remove(selectedItemIndexes, index)
     }
 
     const oldMediaList = this.state.mediaList;
@@ -43,7 +43,7 @@ export default class DetailScreen extends Component {
 
     this.setState({
       mediaList: newMediaList,
-      selectedItems,
+      selectedItemIndexes,
     });
   };
 
@@ -75,7 +75,7 @@ export default class DetailScreen extends Component {
       displaySelectionButtons: true,
       itemPerRow: 3, // bug for 7
       num: 0,
-      selectedItems: [],
+      selectedItemIndexes: [],
     };
   }
 
@@ -102,11 +102,18 @@ export default class DetailScreen extends Component {
   }
 
   onDetailButton() {
-    console.log('pressed');
+    console.log('detail');
+    const { navigate } = this.props.navigation;
+
+    navigate('Detail', {
+      selectedItems: this.state.selectedItemIndexes.map((index) => {
+        return this.state.mediaList[index];
+      }),
+    });
   }
 
   renderButtons() {
-    if (this.state.selectedItems.length == 0) {
+    if (this.state.selectedItemIndexes.length == 0) {
       return null;
     }
 
@@ -116,14 +123,14 @@ export default class DetailScreen extends Component {
       >
         <TouchableHighlight
           style={styles.content}
-          onPress={this.onDetailButton}>
+          onPress={this.onBuckButton.bind(this)}>
           <Text style={styles.text}>
             戻る
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.content}
-          onPress={this.onBuckButton}>
+          onPress={this.onDetailButton.bind(this)}>
           <Text style={styles.text}>
             Detail
           </Text>

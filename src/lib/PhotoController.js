@@ -70,7 +70,7 @@ class PhotoController {
 
     const response = await album.getAssets({
       startIndex: 0,
-      endIndex: 100,
+      endIndex: 300,
       trackInsertsAndDeletes: true,
       trackChanges: false,
       includeMetadata: true,
