@@ -3432,6 +3432,12 @@ react-native-photo-browser@^0.4.0:
     prop-types "15.5.10"
     react-native-progress "^3.2.0"
 
+react-native-photo-view@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-photo-view/-/react-native-photo-view-1.5.2.tgz#5d7f406ed5532a5a8a78c8ef8f40e81f688de1e2"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-photos-framework@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/react-native-photos-framework/-/react-native-photos-framework-1.0.8.tgz#42a83d2b9f195ea6cb48d3bd8dbbb8c090c3061a"
