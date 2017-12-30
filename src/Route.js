@@ -92,7 +92,12 @@ const MainStackNavigator = StackNavigator(
         header: null,
       }),
     },
-    Detail: { screen: DetailScreen },
+    Detail: {
+      screen: DetailScreen,
+      navigationOptions: ({navigation}) => ({
+        title: 'Compare',
+      }),
+    },
   },
   {
     /* initialRouteName: 'Main', */

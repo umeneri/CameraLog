@@ -5,7 +5,15 @@
  */
 
 import React, {Component, PropTypes} from 'react';
-import { Text, View, PanResponder, Image } from 'react-native';
+import {
+  Text,
+  View,
+  PanResponder,
+  Image,
+  Dimensions,
+} from 'react-native';
+
+const { height }= Dimensions.get('window');
 
 function calcDistance(x1, y1, x2, y2) {
   let dx = Math.abs(x1 - x2)
@@ -134,6 +142,13 @@ class ZoomableImage extends Component {
     }
   }
 
+  _calcZoom(width, mode) {
+    if (mode === 'horizontal') {
+      return height / this.props.imageHeight;
+    } else {
+      return width / this.props.imageWidth;
+    }
+  }
   _onLayout(event) {
     let layout = event.nativeEvent.layout;
 
@@ -142,7 +157,8 @@ class ZoomableImage extends Component {
         return;
     }
 
-    let zoom = layout.width / this.props.imageWidth;
+    console.info(layout);
+    const zoom = this._calcZoom(layout.width, this.props.mode);
 
     let offsetTop = layout.height > this.props.imageHeight * zoom ?
       (layout.height - this.props.imageHeight * zoom) / 2

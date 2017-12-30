@@ -36,6 +36,7 @@ export default class DetailScreen extends Component {
       top: 0,
       left: 0,
       zoom: 1,
+      mode: 'horizontal',
     };
   }
 
@@ -81,9 +82,22 @@ export default class DetailScreen extends Component {
       currentIndex,
     } = this.state;
 
+    const flexDirection = this.state.mode === 'horizontal' ? 'row' : 'column';
+    const style = {
+          flex: 1,
+      /* flexDirection: 'column', */
+      /* flexDirection: 'row', */
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      backgroundColor: '#888',
+      flexDirection
+    };
+
+    console.log(style);
+
     return (
       <View
-        style={styles.container}
+        style={style}
       >
         <View
           style={styles.layer}
@@ -94,6 +108,7 @@ export default class DetailScreen extends Component {
             top={this.state.top}
             left={this.state.left}
             zoom={this.state.zoom}
+            mode={this.state.mode}
             imageWidth={500}
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
@@ -110,6 +125,7 @@ export default class DetailScreen extends Component {
             top={this.state.top}
             left={this.state.left}
             zoom={this.state.zoom}
+            mode={this.state.mode}
             imageWidth={500}
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
@@ -125,7 +141,8 @@ export default class DetailScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
+    /* flexDirection: 'column', */
+    /* flexDirection: 'row', */
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#888',
@@ -149,7 +166,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   image: {
-    alignSelf: 'stretch',
+    /* alignSelf: 'stretch', */
     backgroundColor: 'red',
   },
   text: {
