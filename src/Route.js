@@ -1,11 +1,12 @@
 import React from 'react';
 import {
   TabNavigator,
-StackNavigator
+  StackNavigator,
 } from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import CameraScreen from './CameraScreen';
 import DetailScreen from './DetailScreen';
+import TestScreen from './TestScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   View,
@@ -17,6 +18,19 @@ import {
 
 const mainTabNavigator = TabNavigator(
   {
+    Test: {
+      screen: TestScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={ focused ? "ios-camera" : "ios-camera-outline" } style={{
+            height: 24,
+              width: 24,
+              fontSize: 24,
+          }}
+          />
+        )
+      },
+    },
     Home: {
       screen: HomeScreen,
       navigationOptions: {
@@ -58,7 +72,8 @@ const mainTabNavigator = TabNavigator(
     /* }, */
   },
   {
-    initialRouteName: 'Home',
+    /* initialRouteName: 'Home', */
+    initialRouteName: 'Test',
     tabBarPosition: 'bottom',
     animationEnabled: true,
     lazy: true,
@@ -71,11 +86,12 @@ const mainTabNavigator = TabNavigator(
 
 const AppNavigator = StackNavigator(
   {
-    Home: { screen: mainTabNavigator },
+    Main: { screen: mainTabNavigator },
     Detail: { screen: DetailScreen },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Main',
+    /* initialRouteName: 'Test', */
     mode: 'modal',
     navigationOptions: {
       gesturesEnabled: false,
@@ -85,4 +101,3 @@ const AppNavigator = StackNavigator(
 
 
 export default () => <AppNavigator />;
-
