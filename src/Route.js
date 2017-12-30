@@ -95,8 +95,8 @@ const MainStackNavigator = StackNavigator(
     Detail: { screen: DetailScreen },
   },
   {
-    initialRouteName: 'Main',
-    /* initialRouteName: 'Detail', */
+    /* initialRouteName: 'Main', */
+    initialRouteName: 'Detail',
     mode: 'modal',
     navigationOptions: {
       gesturesEnabled: false,

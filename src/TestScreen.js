@@ -29,7 +29,7 @@ export default class TestScreen extends Component {
     return (
       <View style={styles.container}>
         <PhotoView
-          source={{uri: "https://facebook.github.io/react/img/logo_og.png"}}
+          source={{uri: "http://placehold.jp/500x500.png"}}
           onScale={this._onScale}
           onTap={this._onTap}
           onViewTap={this._onViewTap}
@@ -38,8 +38,6 @@ export default class TestScreen extends Component {
           onLoadEnd={this._onLoadEnd}
           showsVerticalScrollIndicator={true}
           showsHorizontalScrollIndicator={true}
-          minimumZoomScale={0.5}
-          maximumZoomScale={3}
           style={styles.photo} />
       </View>
     );
@@ -54,8 +52,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   photo: {
-    width: 300,
-    height: 300,
+    width: 500,
+    height: 500,
     justifyContent: 'center',
     alignItems: 'center'
   },

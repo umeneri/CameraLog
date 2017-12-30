@@ -13,6 +13,7 @@ import {
   Image,
 } from 'react-native';
 import PhotoController from './lib/PhotoController';
+import ZoomableImage from './components/ZoomableImage';
 
 const { width } = Dimensions.get('window');
 
@@ -25,11 +26,16 @@ export default class DetailScreen extends Component {
     super(props);
     console.log(this.props);
 
-    const { selectedItems } = this.props.navigation.state.params;
+    /* const { selectedItems } = this.props.navigation.state.params; */
 
     this.state = {
-      selectedItems,
+      selectedItems: [],
       currentIndex: 0,
+      /* width: 500,  */
+      /* height: 500, */
+      top: 0,
+      left: 0,
+      zoom: 1,
     };
   }
 
@@ -47,8 +53,28 @@ export default class DetailScreen extends Component {
     /* setInterval(this.toggle.bind(this), 1000); */
   }
 
+  onProcessPinch(state) {
+    console.log('pinch');
+    /* console.log(state); */
+    this.setState({top, left, zoom} = state);
+  }
+
+  onProcessTouch(state) {
+    console.log('touch');
+    /* console.log(state); */
+
+    this.setState({top, left, zoom} = state);
+  }
+
+  renderImage() {
+            /* <Image                                              */
+        /*   style={styles.image}                              */
+        /*   source={{uri: selectedItems[currentIndex].photo}} */
+        /* />                                                  */
+  }
+
   render() {
-    console.log("detail");
+    /* console.log("detail");   */
 
     const {
       selectedItems,
@@ -59,13 +85,38 @@ export default class DetailScreen extends Component {
       <View
         style={styles.container}
       >
-        <Text>
-         image is here.
-        </Text>
-        <Image
-          style={styles.image}
-          source={{uri: selectedItems[currentIndex].photo}}
-        />
+        <View
+          style={styles.layer}
+        >
+          <ZoomableImage
+            id={1}
+            style={styles.image}
+            top={this.state.top}
+            left={this.state.left}
+            zoom={this.state.zoom}
+            imageWidth={500}
+            imageHeight={500}
+            onProcessPinch={this.onProcessPinch.bind(this)}
+            onProcessTouch={this.onProcessTouch.bind(this)}
+            source={{uri: "https://placehold.jp/this.state.widthxthis.state.width.png"}}
+          />
+        </View>
+        <View
+          style={styles.layer}
+        >
+          <ZoomableImage
+            id={2}
+            style={styles.image}
+            top={this.state.top}
+            left={this.state.left}
+            zoom={this.state.zoom}
+            imageWidth={500}
+            imageHeight={500}
+            onProcessPinch={this.onProcessPinch.bind(this)}
+            onProcessTouch={this.onProcessTouch.bind(this)}
+            source={{uri: "https://placehold.jp/cc9999/993333/500x500.png"}}
+          />
+        </View>
       </View>
     );
   }
@@ -90,9 +141,15 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
   },
-  image: {
+  layer: {
     flex: 1,
-    width,
+    alignSelf: 'stretch',
+    borderWidth: 1,
+    borderColor: '#e83366',
+    overflow: 'hidden',
+  },
+  image: {
+    alignSelf: 'stretch',
     backgroundColor: 'red',
   },
   text: {
