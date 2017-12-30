@@ -16,7 +16,7 @@ import {
   Platform,
 } from 'react-native';
 
-const mainTabNavigator = TabNavigator(
+const MainTabNavigator = TabNavigator(
   {
     Test: {
       screen: TestScreen,
@@ -84,14 +84,19 @@ const mainTabNavigator = TabNavigator(
 );
 
 
-const AppNavigator = StackNavigator(
+const MainStackNavigator = StackNavigator(
   {
-    Main: { screen: mainTabNavigator },
+    Main: {
+      screen: MainTabNavigator,
+      navigationOptions: ({navigation}) => ({
+        header: null,
+      }),
+    },
     Detail: { screen: DetailScreen },
   },
   {
     initialRouteName: 'Main',
-    /* initialRouteName: 'Test', */
+    /* initialRouteName: 'Detail', */
     mode: 'modal',
     navigationOptions: {
       gesturesEnabled: false,
@@ -100,4 +105,4 @@ const AppNavigator = StackNavigator(
 );
 
 
-export default () => <AppNavigator />;
+export default () => <MainStackNavigator />;
