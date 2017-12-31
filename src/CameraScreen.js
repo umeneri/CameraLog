@@ -20,6 +20,7 @@ export default class CameraScreen extends React.Component {
 
     this.state = {
       uri: null,
+      taked: null,
     };
   }
 
@@ -35,6 +36,12 @@ export default class CameraScreen extends React.Component {
     const album = await PhotoController.findOrCreateAlbum().catch(this.onError);
     const asset = await PhotoController.createAsset(album, data.path);
     console.log(asset);
+
+    this.setState({
+      taked: asset,
+    })
+
+    return asset;
   }
 
   onError(error) {
@@ -48,13 +55,41 @@ export default class CameraScreen extends React.Component {
   async setTargetAsset() {
     const album = await PhotoController.findOrCreateAlbum().catch(this.onError);
     const assets = await PhotoController.getAssets(album, 0, 1).catch(this.onError);
-    const uri = assets.length === 0 ? assets[0].uri : null;
+    const uri = assets.length !== 0 ? assets[0].uri : null;
 
     this.setState({
       uri,
     });
   }
 
+  onZoom() {
+    console.log('zoom');
+  }
+
+  renderTakedImage(asset) {
+    return (
+      <Image style={{
+        width: 50,
+        height: 50,
+        }}
+        source={{uri: asset.uri}}
+      />
+    )
+  }
+
+  renderTaked() {
+    const taked = this.state.taked;
+    console.log(taked);
+    if (taked === null) {
+      return null;
+    } else {
+      return (
+        <TouchableHighlight style={styles.taked} onPress={this.onZoom.bind(this)}>
+          { this.renderTakedImage(taked) }
+        </TouchableHighlight>
+      );
+    }
+  }
   renderButton() {
     return (
       <View style={styles.buttonLayer}>
@@ -101,6 +136,7 @@ export default class CameraScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        { this.renderTaked() }
         { this.renderButton() }
         { this.renderImage() }
         { this.renderCamera() }
@@ -157,5 +193,15 @@ const styles = StyleSheet.create({
     height,
     opacity: 0.2,
   },
+  taked: {
+    position: 'absolute',
+    left: 20,
+    top: 40,
+    zIndex: 2000,
+    width: 50,
+    /* height: 100, */
+    backgroundColor: 'white',
+    opacity: 0.5,
+  }
 });
 
