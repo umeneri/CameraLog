@@ -157,7 +157,6 @@ class ZoomableImage extends Component {
         return;
     }
 
-    console.info(layout);
     const zoom = this._calcZoom(layout.width, this.props.mode);
 
     let offsetTop = layout.height > this.props.imageHeight * zoom ?
@@ -170,7 +169,7 @@ class ZoomableImage extends Component {
       height: layout.height,
       zoom: zoom,
       offsetTop: offsetTop,
-      minZoom: zoom
+      minZoom: 0.5,
     });
 
   }
@@ -208,9 +207,7 @@ class ZoomableImage extends Component {
   }
 
   render() {
-    /* console.log('render', this.props.id, this.state.isZooming, this.state.isMoving); */
     const isTouching = (this.state.isZooming || this.state.isMoving);
-    console.log(this.state);
     const top = isTouching ? this.state.top : this.props.top;
     const left = isTouching ? this.state.left : this.props.left;
     const zoom = isTouching ? this.state.zoom : this.props.zoom;

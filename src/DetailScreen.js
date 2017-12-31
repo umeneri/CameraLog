@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import PhotoController from './lib/PhotoController';
 import ZoomableImage from './components/ZoomableImage';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width } = Dimensions.get('window');
 
@@ -24,7 +25,6 @@ export default class DetailScreen extends Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props);
 
     /* const { selectedItems } = this.props.navigation.state.params; */
 
@@ -40,60 +40,70 @@ export default class DetailScreen extends Component {
     };
   }
 
-  toggle() {
-    const list = this.state.selectedItems;
-    console.log('toggle');
-    console.log(this.state.currentIndex);
-
-    this.setState({
-      currentIndex: this.state.currentIndex + 1 % list.length,
-    })
-  }
-
-  async componentDidMount() {
-    /* setInterval(this.toggle.bind(this), 1000); */
-  }
-
   onProcessPinch(state) {
-    console.log('pinch');
-    /* console.log(state); */
     this.setState({top, left, zoom} = state);
   }
 
   onProcessTouch(state) {
-    console.log('touch');
-    /* console.log(state); */
-
     this.setState({top, left, zoom} = state);
   }
 
-  renderImage() {
-            /* <Image                                              */
-        /*   style={styles.image}                              */
-        /*   source={{uri: selectedItems[currentIndex].photo}} */
-        /* />                                                  */
+  onHorizontalButton() {
+    this.setState({
+      mode: 'horizontal',
+    });
   }
 
-  render() {
-    /* console.log("detail");   */
+  onVerticalButton() {
+    this.setState({
+      mode: 'vertical',
+    });
+  }
+
+  renderButtons() {
+
+    return (
+      <View
+      style={styles.buttons}
+      >
+        <TouchableHighlight
+          style={styles.content}
+          onPress={this.onHorizontalButton.bind(this)}>
+          <View style={styles.horizontalSquareContainer}>
+            <View style={styles.horizontalSquare}>
+            </View>
+            <View style={styles.horizontalSquare}>
+            </View>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.content}
+          onPress={this.onVerticalButton.bind(this)}>
+          <View style={styles.verticalSquareContainer}>
+            <View style={styles.verticalSquare}>
+            </View>
+            <View style={styles.verticalSquare}>
+            </View>
+          </View>
+        </TouchableHighlight>
+      </View>
+    )
+  }
+
+  renderImages() {
+    const flexDirection = this.state.mode === 'horizontal' ? 'row' : 'column';
+    const style = {
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      backgroundColor: '#888',
+      flexDirection,
+    };
 
     const {
       selectedItems,
       currentIndex,
     } = this.state;
-
-    const flexDirection = this.state.mode === 'horizontal' ? 'row' : 'column';
-    const style = {
-          flex: 1,
-      /* flexDirection: 'column', */
-      /* flexDirection: 'row', */
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      backgroundColor: '#888',
-      flexDirection
-    };
-
-    console.log(style);
 
     return (
       <View
@@ -103,7 +113,7 @@ export default class DetailScreen extends Component {
           style={styles.layer}
         >
           <ZoomableImage
-            id={1}
+            id={0}
             style={styles.image}
             top={this.state.top}
             left={this.state.left}
@@ -113,14 +123,14 @@ export default class DetailScreen extends Component {
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
             onProcessTouch={this.onProcessTouch.bind(this)}
-            source={{uri: "https://placehold.jp/this.state.widthxthis.state.width.png"}}
+            source={{uri: "https://placehold.jp/500x500.png"}}
           />
         </View>
         <View
           style={styles.layer}
         >
           <ZoomableImage
-            id={2}
+            id={1}
             style={styles.image}
             top={this.state.top}
             left={this.state.left}
@@ -136,42 +146,50 @@ export default class DetailScreen extends Component {
       </View>
     );
   }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        { this.renderImages() }
+        { this.renderButtons() }
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    /* flexDirection: 'column', */
-    /* flexDirection: 'row', */
+    flexDirection: 'column',
     justifyContent: 'space-around',
-    alignItems: 'center',
     backgroundColor: '#888',
   },
   buttons: {
     backgroundColor: '#999',
-    /* width, */
     height: 50,
+    alignSelf: 'stretch',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
   },
   content: {
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'stretch',
+    flex: 1,
   },
   layer: {
     flex: 1,
     alignSelf: 'stretch',
-    borderWidth: 1,
-    borderColor: '#e83366',
     overflow: 'hidden',
   },
   image: {
-    /* alignSelf: 'stretch', */
     backgroundColor: 'red',
   },
   text: {
+    flex: 1,
     fontSize: 16,
-    alignItems: 'center',
     color: '#000',
   },
   bold: {
@@ -179,6 +197,32 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: 12,
+  },
+  horizontalSquareContainer: {
+    width: 24,
+    height: 24,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  horizontalSquare: {
+    width: 12,
+    height: 24,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  verticalSquareContainer: {
+    width: 24,
+    height: 24,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verticalSquare: {
+    width: 24,
+    height: 12,
+    borderWidth: 1,
+    borderColor: 'black',
   },
 });
 
