@@ -1,4 +1,5 @@
 import RNPhotosFramework from 'react-native-photos-framework';
+import moment from 'moment'
 
 const TITLE = 'cameralog';
 
@@ -70,11 +71,24 @@ class PhotoController {
 
     const response = await album.getAssets({
       startIndex: 0,
-      endIndex: 300,
+      endIndex: 500,
       trackInsertsAndDeletes: true,
       trackChanges: false,
       includeMetadata: true,
+      fetchOptions : {
+        sourceTypes: ['userLibrary'],
+        sortDescriptors : [
+          {
+            key: 'modificationDate',
+            ascending: true,
+          }
+        ],
+      },
     })
+    console.log(response.assets.map((asset) => {
+      return moment(new Date(asset.modificationDateUTCSeconds * 1000)).format("YY/MM/DD:HH");
+    }));
+
     return asset = response.assets;
   }
 

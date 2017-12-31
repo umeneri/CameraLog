@@ -10,8 +10,9 @@ import {
   TouchableHighlight,
   Dimensions,
 } from 'react-native';
-import PhotoBrowser from 'react-native-photo-browser';
+import DatePhotoBrowser from './components/DatePhotoBrowser';
 import PhotoController from './lib/PhotoController';
+import moment from 'moment'
 
 const { width } = Dimensions.get('window');
 
@@ -73,7 +74,7 @@ export default class HomeScreen extends Component {
       displayActionButton: true,
       displayNavArrows: true,
       displaySelectionButtons: true,
-      itemPerRow: 3, // bug for 7
+      itemPerRow: 7,
       selectedItemIndexes: [],
     };
   }
@@ -84,6 +85,7 @@ export default class HomeScreen extends Component {
     const mediaList = assets.map((asset) => {
       return {
         photo: asset.uri,
+        createdAt: moment(new Date(asset.modificationDateUTCSeconds * 1000)).format("MM/DD"),
       }
     });
 
@@ -162,13 +164,14 @@ export default class HomeScreen extends Component {
       <View
         style={styles.container}
       >
-        <PhotoBrowser
+        <DatePhotoBrowser
         onBack={navigator.pop}
         mediaList={mediaList}
         initialIndex={initialIndex}
         displayNavArrows={displayNavArrows}
         displaySelectionButtons={displaySelectionButtons}
         displayActionButton={displayActionButton}
+        displayTopBar={true}
         startOnGrid={startOnGrid}
         enableGrid={enableGrid}
         useCircleProgress
