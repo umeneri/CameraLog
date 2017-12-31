@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Camera from 'react-native-camera';
 import PhotoController from './lib/PhotoController';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -59,19 +60,45 @@ export default class CameraScreen extends React.Component {
     });
   }
 
-  renderImage() {
-    console.log('render');
-    console.log(this.state.uri);
+  renderButton() {
+    return (
+      <View style={styles.buttonLayer}>
+        <TouchableHighlight style={styles.capture} onPress={this.takePicture.bind(this)}>
+          <Ionicons name={ "ios-camera" } style={{
+            height: 80,
+            width: 80,
+            fontSize: 80,
+            opacity: 0.5,
+            color: 'white',
+            }}
+          />
+        </TouchableHighlight>
+      </View>
+    )
+  }
 
+  renderImage() {
     if (this.state.uri === null) {
       return null;
     } else {
       return (
-        <Image style={styles.image}
-           source={{uri: this.state.uri}}
-         />
+        <View style={styles.target}>
+          <Image style={styles.image}
+             source={{uri: this.state.uri}}
+           />
+        </View>
       );
     }
+  }
+
+  renderCamera() {
+    return (
+      <Camera
+        ref={this.ref.bind(this)}
+        style={styles.preview}
+        aspect={Camera.constants.Aspect.fill}>
+      </Camera>
+    );
   }
 
   render() {
@@ -79,16 +106,9 @@ export default class CameraScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.target}>
-          { this.renderImage() }
-        </View>
-        <Camera
-          ref={this.ref.bind(this)}
-          style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}>
-          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
-        </Camera>
-
+        { this.renderButton() }
+        { this.renderImage() }
+        { this.renderCamera() }
       </View>
     );
   }
@@ -104,14 +124,26 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40,
+  buttonLayer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 40,
     zIndex: 2000,
+    width,
+    height,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  capture: {
+    width: 100,
+
+    padding: 10,
+
+    // fix the gap of icon
+    paddingLeft: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
   },
   button: {
     flex: 1,
@@ -128,7 +160,7 @@ const styles = StyleSheet.create({
   image: {
     width,
     height,
-    opacity: 0.3,
+    opacity: 0.2,
   },
 });
 
