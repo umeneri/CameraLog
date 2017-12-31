@@ -21,7 +21,6 @@ export default class CameraScreen extends React.Component {
     this.state = {
       uri: null,
     };
-
   }
 
   async componentDidMount() {
@@ -32,9 +31,14 @@ export default class CameraScreen extends React.Component {
     console.log('take');
     const options = {};
 
-    const data = await this.camera.capture({metadata: options}).catch(err => console.error(err));
-    const album = await PhotoController.findOrCreateAlbum();
-    const asset = PhotoController.createAsset(album, data.path);
+    const data = await this.camera.capture({metadata: options}).catch(this.onError);
+    const album = await PhotoController.findOrCreateAlbum().catch(this.onError);
+    const asset = await PhotoController.createAsset(album, data.path);
+    console.log(asset);
+  }
+
+  onError(error) {
+    console.error(error);
   }
 
   ref(cam) {
@@ -42,21 +46,12 @@ export default class CameraScreen extends React.Component {
   }
 
   async setTargetAsset() {
-    const album = await PhotoController.findOrCreateAlbum();
-    const assets = await PhotoController.getAssets(album, 0, 1);
-
-    if (assets.length === 0) {
-      this.setState({
-        uri: null,
-      });
-      return;
-    }
-
-    const asset = assets[0];
-    console.log(asset);
+    const album = await PhotoController.findOrCreateAlbum().catch(this.onError);
+    const assets = await PhotoController.getAssets(album, 0, 1).catch(this.onError);
+    const uri = assets.length === 0 ? assets[0].uri : null;
 
     this.setState({
-      uri: asset.uri,
+      uri,
     });
   }
 
