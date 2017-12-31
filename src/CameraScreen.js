@@ -21,6 +21,7 @@ export default class CameraScreen extends React.Component {
     this.state = {
       uri: null,
       taked: null,
+      type: 'back',
     };
   }
 
@@ -66,6 +67,31 @@ export default class CameraScreen extends React.Component {
     console.log('zoom');
   }
 
+  reverse() {
+    const nextType = this.state.type === 'front' ? 'back' : 'front';
+    console.log(this.state.type);
+
+    this.setState({
+      type: nextType,
+    });
+
+  }
+
+  renderReverse() {
+    return (
+      <TouchableHighlight style={styles.reverse} onPress={this.reverse.bind(this)}>
+        <Ionicons name={ "ios-reverse-camera" } style={{
+          height: 60,
+          width: 60,
+          fontSize: 60,
+          opacity: 0.5,
+          color: 'white',
+          }}
+        />
+      </TouchableHighlight>
+    )
+  }
+
   renderTakedImage(asset) {
     return (
       <Image style={{
@@ -79,7 +105,7 @@ export default class CameraScreen extends React.Component {
 
   renderTaked() {
     const taked = this.state.taked;
-    console.log(taked);
+
     if (taked === null) {
       return null;
     } else {
@@ -136,6 +162,7 @@ export default class CameraScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        { this.renderReverse() }
         { this.renderTaked() }
         { this.renderButton() }
         { this.renderImage() }
@@ -158,7 +185,7 @@ const styles = StyleSheet.create({
   buttonLayer: {
     position: 'absolute',
     left: 0,
-    bottom: 40,
+    bottom: 30,
     zIndex: 2000,
     width,
     height,
@@ -167,7 +194,6 @@ const styles = StyleSheet.create({
   },
   capture: {
     width: 100,
-
     padding: 10,
 
     // fix the gap of icon
@@ -202,6 +228,14 @@ const styles = StyleSheet.create({
     /* height: 100, */
     backgroundColor: 'white',
     opacity: 0.5,
+  },
+  reverse: {
+    position: 'absolute',
+    right: 20,
+    top: 40,
+    zIndex: 2000,
+    /* width: 50,  */
+    /* height: 00, */
   }
 });
 
