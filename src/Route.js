@@ -59,7 +59,8 @@ const MainTabNavigator = TabNavigator(
     /* }, */
   },
   {
-    initialRouteName: 'Home',
+    /* initialRouteName: 'Home', */
+    initialRouteName: 'Camera',
     tabBarPosition: 'bottom',
     animationEnabled: true,
     lazy: true,

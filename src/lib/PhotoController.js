@@ -53,7 +53,7 @@ class PhotoController {
     });
   }
 
-  async getAssets(album) {
+  async getAssets(album, start = 0, end = 500) {
     /* return await RNPhotosFramework.getAssets({ */
     /*   startIndex: 0,                           */
     /*   endIndex: 100,                           */
@@ -70,8 +70,8 @@ class PhotoController {
     /* });                                        */
 
     const response = await album.getAssets({
-      startIndex: 0,
-      endIndex: 500,
+      startIndex: start,
+      endIndex: end,
       trackInsertsAndDeletes: true,
       trackChanges: false,
       includeMetadata: true,
@@ -85,9 +85,6 @@ class PhotoController {
         ],
       },
     })
-    console.log(response.assets.map((asset) => {
-      return moment(new Date(asset.modificationDateUTCSeconds * 1000)).format("YY/MM/DD:HH");
-    }));
 
     return asset = response.assets;
   }
