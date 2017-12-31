@@ -26,13 +26,11 @@ export default class DetailScreen extends Component {
   constructor(props) {
     super(props);
 
-    /* const { selectedItems } = this.props.navigation.state.params; */
+    const { selectedItems } = this.props.navigation.state.params;
 
     this.state = {
-      selectedItems: [],
+      selectedItems,
       currentIndex: 0,
-      /* width: 500,  */
-      /* height: 500, */
       top: 0,
       left: 0,
       zoom: 1,
@@ -70,20 +68,20 @@ export default class DetailScreen extends Component {
           style={styles.content}
           onPress={this.onHorizontalButton.bind(this)}>
           <View style={styles.horizontalSquareContainer}>
-            <View style={styles.horizontalSquare}>
-            </View>
-            <View style={styles.horizontalSquare}>
-            </View>
+            <Text style={styles.horizontalSquare}>
+            </Text>
+            <Text style={styles.horizontalSquare}>
+            </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.content}
           onPress={this.onVerticalButton.bind(this)}>
           <View style={styles.verticalSquareContainer}>
-            <View style={styles.verticalSquare}>
-            </View>
-            <View style={styles.verticalSquare}>
-            </View>
+            <Text style={styles.verticalSquare}>
+            </Text>
+            <Text style={styles.verticalSquare}>
+            </Text>
           </View>
         </TouchableHighlight>
       </View>
@@ -123,7 +121,7 @@ export default class DetailScreen extends Component {
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
             onProcessTouch={this.onProcessTouch.bind(this)}
-            source={{uri: "https://placehold.jp/500x500.png"}}
+            source={{uri: selectedItems[0].photo}}
           />
         </View>
         <View
@@ -140,7 +138,7 @@ export default class DetailScreen extends Component {
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
             onProcessTouch={this.onProcessTouch.bind(this)}
-            source={{uri: "https://placehold.jp/cc9999/993333/500x500.png"}}
+            source={{uri: selectedItems[1].photo}}
           />
         </View>
       </View>
@@ -165,12 +163,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#888',
   },
   buttons: {
-    backgroundColor: '#999',
     height: 50,
     alignSelf: 'stretch',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    backgroundColor: 'black',
   },
   content: {
     flexDirection: 'column',
@@ -209,7 +207,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 24,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'white',
   },
   verticalSquareContainer: {
     width: 24,
@@ -222,7 +220,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 12,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'white',
   },
 });
 

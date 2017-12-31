@@ -65,8 +65,6 @@ export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
 
-    console.log('home');
-
     this.state = {
       mediaList: [],
       title: 'Library photos',
@@ -76,7 +74,6 @@ export default class HomeScreen extends Component {
       displayNavArrows: true,
       displaySelectionButtons: true,
       itemPerRow: 3, // bug for 7
-      num: 0,
       selectedItemIndexes: [],
     };
   }
@@ -100,11 +97,18 @@ export default class HomeScreen extends Component {
   }
 
   onBuckButton() {
-    console.log('pressed');
+    const mediaList = this.state.mediaList;
+    this.state.selectedItemIndexes.forEach((index) => {
+      mediaList[index].selected = false;
+    });
+
+    this.setState({
+      selectedItemIndexes: [],
+      mediaList,
+    });
   }
 
   onDetailButton() {
-    console.log('detail');
     const { navigate } = this.props.navigation;
 
     navigate('Detail', {
@@ -115,7 +119,7 @@ export default class HomeScreen extends Component {
   }
 
   renderButtons() {
-    if (this.state.selectedItemIndexes.length == 0) {
+    if (this.state.selectedItemIndexes.length < 2) {
       return null;
     }
 
@@ -127,14 +131,14 @@ export default class HomeScreen extends Component {
           style={styles.content}
           onPress={this.onBuckButton.bind(this)}>
           <Text style={styles.text}>
-            戻る
+            やりなおす
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.content}
           onPress={this.onDetailButton.bind(this)}>
           <Text style={styles.text}>
-            Detail
+            くらべる
           </Text>
       </TouchableHighlight>
       </View>
@@ -188,12 +192,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttons: {
-    backgroundColor: '#999',
     width,
     height: 50,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    backgroundColor: 'black',
   },
   content: {
     alignItems: 'center',
@@ -201,7 +205,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     alignItems: 'center',
-    color: '#000',
+    color: 'white',
   },
   bold: {
     fontWeight: 'bold',

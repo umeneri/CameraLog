@@ -18,19 +18,6 @@ import {
 
 const MainTabNavigator = TabNavigator(
   {
-    Test: {
-      screen: TestScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={ focused ? "ios-camera" : "ios-camera-outline" } style={{
-            height: 24,
-              width: 24,
-              fontSize: 24,
-          }}
-          />
-        )
-      },
-    },
     Home: {
       screen: HomeScreen,
       navigationOptions: {
@@ -72,8 +59,7 @@ const MainTabNavigator = TabNavigator(
     /* }, */
   },
   {
-    /* initialRouteName: 'Home', */
-    initialRouteName: 'Test',
+    initialRouteName: 'Home',
     tabBarPosition: 'bottom',
     animationEnabled: true,
     lazy: true,
@@ -95,13 +81,13 @@ const MainStackNavigator = StackNavigator(
     Detail: {
       screen: DetailScreen,
       navigationOptions: ({navigation}) => ({
-        title: 'Compare',
+        title: 'くらべる',
       }),
     },
   },
   {
-    /* initialRouteName: 'Main', */
-    initialRouteName: 'Detail',
+    initialRouteName: 'Main',
+    /* initialRouteName: 'Detail', */
     mode: 'modal',
     navigationOptions: {
       gesturesEnabled: false,
