@@ -10,9 +10,9 @@
 - [x] 保存後→保存しましたがわかるように
 - [] 設定
 - 選択ボタン picker
-- 2枚比べる
+- [x]2枚比べる
 - かめらろーるから
-- landscape対応
+- [x]landscape対応
 
 - Homeのrefetch
 - Homeのロード速度

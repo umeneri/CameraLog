@@ -103,8 +103,6 @@ export default class DetailScreen extends Component {
       currentIndex,
     } = this.state;
 
-    console.log(this.state);
-
     return (
       <View
         style={style}
@@ -123,7 +121,7 @@ export default class DetailScreen extends Component {
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
             onProcessTouch={this.onProcessTouch.bind(this)}
-            source={{uri: selectedItems[0].uri}}
+            source={{uri: selectedItems[0].uri || selectedItems[0].photo}}
           />
         </View>
         <View
@@ -140,7 +138,7 @@ export default class DetailScreen extends Component {
             imageHeight={500}
             onProcessPinch={this.onProcessPinch.bind(this)}
             onProcessTouch={this.onProcessTouch.bind(this)}
-            source={{uri: selectedItems[1].uri}}
+            source={{uri: selectedItems[1].uri || selectedItems[1].photo}}
           />
         </View>
       </View>

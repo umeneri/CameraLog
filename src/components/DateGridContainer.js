@@ -42,7 +42,7 @@ export default class DateGridContainer extends GridContainer {
             thumbnail
             progressImage={require('react-native-photo-browser/Assets/hourglass.png')}
             displaySelectionButtons={displaySelectionButtons}
-            uri={media.thumb || media.photo}
+            uri={media.thumb || media.uri || media.photo}
             selected={media.selected}
             onSelection={(isSelected) => {
               onMediaSelection(rowID, isSelected);

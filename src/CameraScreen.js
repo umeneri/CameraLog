@@ -75,8 +75,6 @@ export default class CameraScreen extends React.Component {
   jumpToDetail() {
     const { navigate } = this.props.navigation;
 
-    console.log(this.state.selected);
-
     navigate('Detail', {
       selectedItems: this.state.selected,
     });
@@ -85,7 +83,6 @@ export default class CameraScreen extends React.Component {
 
   reverse() {
     const nextType = this.state.type === 'front' ? 'back' : 'front';
-    console.log(this.state.type);
 
     this.setState({
       type: nextType,

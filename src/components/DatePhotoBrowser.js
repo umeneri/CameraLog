@@ -33,6 +33,7 @@ export default class DatePhotoBrowser extends PhotoBrowser {
       style,
       square,
       gridOffset,
+      customTitle,
     } = this.props;
     const {
       dataSource,
@@ -109,7 +110,7 @@ export default class DatePhotoBrowser extends PhotoBrowser {
         <TopBarComponent
           height={TOOLBAR_HEIGHT}
           displayed={displayTopBar}
-          title={isFullScreen ? title : `${mediaList.length} photos`}
+          title={isFullScreen ? title : `${mediaList.length}の写真`}
           onBack={onBack}
         />
       </View>
