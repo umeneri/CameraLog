@@ -11,6 +11,7 @@ import {
 import Camera from 'react-native-camera';
 import PhotoController from './lib/PhotoController';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ImagePicker from 'react-native-image-picker';
 
 const { width, height } = Dimensions.get('window');
 
@@ -68,8 +69,16 @@ export default class CameraScreen extends React.Component {
     });
   }
 
-  onZoom() {
-    console.log('zoom');
+  async onPick() {
+    const options = {};
+    const result = await ImagePicker.launchImageLibrary(options, (response)  => {
+      const newSelected = this.state.selected;
+      newSelected.unshift({uri: response.uri, selected: true});
+
+      this.setState({
+        selected: newSelected,
+      });
+    });
   }
 
   jumpToDetail() {
@@ -114,13 +123,13 @@ export default class CameraScreen extends React.Component {
 
     if (selected.length === 0) {
       return (
-        <TouchableHighlight style={styles.selected} onPress={this.onZoom.bind(this)}>
+        <TouchableHighlight style={styles.selected} onPress={this.onPick.bind(this)}>
           <Text></Text>
         </TouchableHighlight>
       );
     } else {
       return (
-        <TouchableHighlight style={styles.selected} onPress={this.onZoom.bind(this)}>
+        <TouchableHighlight style={styles.selected} onPress={this.onPick.bind(this)}>
           { this.renderSelectedImage(selected[0]) }
         </TouchableHighlight>
       );

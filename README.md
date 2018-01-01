@@ -9,10 +9,14 @@
 - [x] カメラフロント
 - [x] 保存後→保存しましたがわかるように
 - [] 設定
-- 選択ボタン picker
 - [x]2枚比べる
-- かめらろーるから
 - [x]landscape対応
+- 選択ボタン
+- [x]かめらろーるから
+
+- 指示
+  - コンポーネント
+  - フラグ保存
 
 - Homeのrefetch
 - Homeのロード速度
@@ -22,3 +26,5 @@
 - [  ] 説明文
 - [  ] 実機テスト
 - [  ] シェア機能
+- [] スクショ [gre/react-native-view-shot: Snapshot a React Native view and save it to an image](https://github.com/gre/react-native-view-shot)
+
