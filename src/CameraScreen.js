@@ -80,14 +80,7 @@ export default class CameraScreen extends React.Component {
   renderReverse() {
     return (
       <TouchableHighlight style={styles.reverse} onPress={this.reverse.bind(this)}>
-        <Ionicons name={ "ios-reverse-camera" } style={{
-          height: 60,
-          width: 60,
-          fontSize: 60,
-          opacity: 0.5,
-          color: 'white',
-          }}
-        />
+        <Ionicons name={ "ios-reverse-camera" } style={styles.reverseIcon} />
       </TouchableHighlight>
     )
   }
@@ -95,8 +88,8 @@ export default class CameraScreen extends React.Component {
   renderTakedImage(asset) {
     return (
       <Image style={{
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         }}
         source={{uri: asset.uri}}
       />
@@ -107,7 +100,11 @@ export default class CameraScreen extends React.Component {
     const taked = this.state.taked;
 
     if (taked === null) {
-      return null;
+      return (
+        <TouchableHighlight style={styles.taked} onPress={this.onZoom.bind(this)}>
+          <Text></Text>
+        </TouchableHighlight>
+      );
     } else {
       return (
         <TouchableHighlight style={styles.taked} onPress={this.onZoom.bind(this)}>
@@ -116,24 +113,26 @@ export default class CameraScreen extends React.Component {
       );
     }
   }
-  renderButton() {
+
+  renderShutter() {
     return (
-      <View style={styles.buttonLayer}>
-        <TouchableHighlight style={styles.capture} onPress={this.takePicture.bind(this)}>
-          <Ionicons name={ "ios-camera" } style={{
-            height: 80,
-            width: 80,
-            fontSize: 80,
-            opacity: 0.5,
-            color: 'white',
-            }}
-          />
-        </TouchableHighlight>
-      </View>
+      <TouchableHighlight style={styles.shutter} onPress={this.takePicture.bind(this)}>
+        <Ionicons name={ "ios-camera" } style={styles.shutterIcon} />
+      </TouchableHighlight>
     )
   }
 
-  renderImage() {
+  renderButtons() {
+    return (
+      <View style={styles.buttonLayer}>
+        { this.renderTaked() }
+        { this.renderShutter() }
+        { this.renderReverse() }
+      </View>
+    );
+  }
+
+  renderTargetImage() {
     if (this.state.uri === null) {
       return null;
     } else {
@@ -162,10 +161,8 @@ export default class CameraScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        { this.renderReverse() }
-        { this.renderTaked() }
-        { this.renderButton() }
-        { this.renderImage() }
+        { this.renderButtons() }
+        { this.renderTargetImage() }
         { this.renderCamera() }
       </View>
     );
@@ -182,30 +179,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  buttonLayer: {
-    position: 'absolute',
-    left: 0,
-    bottom: 30,
-    zIndex: 2000,
-    width,
-    height,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    width: 100,
-    padding: 10,
-
-    // fix the gap of icon
-    paddingLeft: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 5,
-  },
-  button: {
-    flex: 1,
-    width: 40,
-  },
   target: {
     position: 'absolute',
     top: 0,
@@ -219,23 +192,64 @@ const styles = StyleSheet.create({
     height,
     opacity: 0.2,
   },
-  taked: {
+  buttonLayer: {
+    flex: 1,
     position: 'absolute',
-    left: 20,
-    top: 40,
+    left: 0,
+    bottom: 0,
     zIndex: 2000,
-    width: 50,
-    /* height: 100, */
-    backgroundColor: 'white',
-    opacity: 0.5,
+    width,
+    height: 80,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  shutter: {
+    flex: 0,
+    width: 200,
+    /* padding: 10, */
+
+    // fix the gap of icon
+    /* paddingLeft: 15, */
+    alignItems: 'center',
+    justifyContent: 'center',
+    /* borderRadius: 5, */
+    /* backgroundColor: 'blue', */
+  },
+  shutterIcon: {
+    /* height: 80, */
+    /* width: 80, */
+    fontSize: 80,
+    /* opacity: 0.5, */
+    color: 'white',
+  },
+  taked: {
+    flex: 1,
+    /* width: 60, */
+    /* height: 60, */
+    /* margin: 20, */
+    alignItems: 'center',
+    justifyContent: 'center',
+    /* paddingLeft: 10, */
+    /* backgroundColor: 'white', */
+    /* opacity: 0.5, */
   },
   reverse: {
-    position: 'absolute',
-    right: 20,
-    top: 40,
-    zIndex: 2000,
-    /* width: 50,  */
+    flex: 1,
+    /* paddingLeft: 30, */
+    /* width: 50, */
     /* height: 00, */
-  }
+    alignItems: 'center',
+    justifyContent: 'center',
+    /* backgroundColor: 'green', */
+  },
+  reverseIcon: {
+    /* height: 60, */
+    /* width: 60, */
+    fontSize: 50,
+    /* opacity: 0.5, */
+    color: 'white',
+  },
 });
 
