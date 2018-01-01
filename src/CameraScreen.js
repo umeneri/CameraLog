@@ -20,7 +20,7 @@ export default class CameraScreen extends React.Component {
 
     this.state = {
       uri: null,
-      taked: null,
+      selected: [],
       type: 'back',
     };
   }
@@ -36,13 +36,18 @@ export default class CameraScreen extends React.Component {
     const data = await this.camera.capture({metadata: options}).catch(this.onError);
     const album = await PhotoController.findOrCreateAlbum().catch(this.onError);
     const asset = await PhotoController.createAsset(album, data.path);
-    console.log(asset);
+    const newSelected = this.state.selected.concat(asset);
+    if (newSelected.length > 2) {
+        newSelected.shift();
+    }
 
-    this.setState({
-      taked: asset,
-    })
+    const result = await this.setState({
+      selected: newSelected,
+    });
 
-    return asset;
+    if (newSelected.length >= 2) {
+      this.jumpToDetail();
+    }
   }
 
   onError(error) {
@@ -67,6 +72,17 @@ export default class CameraScreen extends React.Component {
     console.log('zoom');
   }
 
+  jumpToDetail() {
+    const { navigate } = this.props.navigation;
+
+    console.log(this.state.selected);
+
+    navigate('Detail', {
+      selectedItems: this.state.selected,
+    });
+  }
+
+
   reverse() {
     const nextType = this.state.type === 'front' ? 'back' : 'front';
     console.log(this.state.type);
@@ -85,7 +101,7 @@ export default class CameraScreen extends React.Component {
     )
   }
 
-  renderTakedImage(asset) {
+  renderSelectedImage(asset) {
     return (
       <Image style={{
         width: 60,
@@ -96,19 +112,19 @@ export default class CameraScreen extends React.Component {
     )
   }
 
-  renderTaked() {
-    const taked = this.state.taked;
+  renderSelected() {
+    const selected = this.state.selected;
 
-    if (taked === null) {
+    if (selected.length === 0) {
       return (
-        <TouchableHighlight style={styles.taked} onPress={this.onZoom.bind(this)}>
+        <TouchableHighlight style={styles.selected} onPress={this.onZoom.bind(this)}>
           <Text></Text>
         </TouchableHighlight>
       );
     } else {
       return (
-        <TouchableHighlight style={styles.taked} onPress={this.onZoom.bind(this)}>
-          { this.renderTakedImage(taked) }
+        <TouchableHighlight style={styles.selected} onPress={this.onZoom.bind(this)}>
+          { this.renderSelectedImage(selected[0]) }
         </TouchableHighlight>
       );
     }
@@ -125,7 +141,7 @@ export default class CameraScreen extends React.Component {
   renderButtons() {
     return (
       <View style={styles.buttonLayer}>
-        { this.renderTaked() }
+        { this.renderSelected() }
         { this.renderShutter() }
         { this.renderReverse() }
       </View>
@@ -133,13 +149,14 @@ export default class CameraScreen extends React.Component {
   }
 
   renderTargetImage() {
-    if (this.state.uri === null) {
+    const selected = this.state.selected;
+    if (selected.length === 0) {
       return null;
     } else {
       return (
         <View style={styles.target}>
           <Image style={styles.image}
-             source={{uri: this.state.uri}}
+             source={{uri: selected[0].uri}}
            />
         </View>
       );
@@ -151,7 +168,8 @@ export default class CameraScreen extends React.Component {
       <Camera
         ref={this.ref.bind(this)}
         style={styles.preview}
-        aspect={Camera.constants.Aspect.fill}>
+        aspect={Camera.constants.Aspect.fill}
+        type={this.state.type}>
       </Camera>
     );
   }
@@ -224,7 +242,7 @@ const styles = StyleSheet.create({
     /* opacity: 0.5, */
     color: 'white',
   },
-  taked: {
+  selected: {
     flex: 1,
     /* width: 60, */
     /* height: 60, */

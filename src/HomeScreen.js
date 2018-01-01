@@ -52,14 +52,14 @@ export default class HomeScreen extends Component {
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showShareActionSheetWithOptions(
         {
-          url: media.photo,
+          url: media.uri,
           message: media.caption,
         },
         () => {},
         () => {},
       );
     } else {
-      alert(`handle sharing on android for ${media.photo}, index: ${index}`);
+      alert(`handle sharing on android for ${media.uri}, index: ${index}`);
     }
   };
 
@@ -84,7 +84,7 @@ export default class HomeScreen extends Component {
     const assets = await PhotoController.getAssets(album);
     const mediaList = assets.map((asset) => {
       return {
-        photo: asset.uri,
+        uri: asset.uri,
         createdAt: moment(new Date(asset.modificationDateUTCSeconds * 1000)).format("MM/DD"),
       }
     });
